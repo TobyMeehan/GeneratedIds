@@ -1,0 +1,59 @@
+@namespace(uri="ids", prefix="")
+package ids;
+
+datatype TimeSpan : int;
+
+class Ids {
+	attr String name;
+	val Event[*] events;
+	val StateMachine[*] stateMachines;
+}
+
+
+class Field {
+	attr String name;
+	ref Type type;
+}
+
+class Type {
+	attr String name;
+}
+
+
+class Event {
+	attr String name;
+	val Field[*] fields;
+}
+
+
+class StateMachine {
+	attr String name;
+	val Event[*] events;
+	val State[*] states;
+	val Transition[*] transitions;
+	val Schedule[*] schedules;
+}
+
+class State {
+	attr String name;
+}
+
+class Transition {
+	attr String name;
+	attr boolean initial;
+	attr boolean final;
+
+	ref State to;
+	ref State from;
+
+	ref Event event;
+	ref Schedule[*] schedule;
+	ref Schedule[*] unschedule;
+	ref Event[*] publish;
+}
+
+class Schedule {
+	attr String name;
+	attr TimeSpan delay; 
+	ref Event event;
+}

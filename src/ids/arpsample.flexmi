@@ -1,0 +1,48 @@
+<?nsuri ids?>
+
+<_>
+
+	<Type name="PhysicalAddress" />
+	<Type name="IPAddress" />
+
+	<Ids name="Arp Detection System">
+		<Event name="ArpRequest">
+			<Field name="Source" type="PhysicalAddress" />
+			<Field name="RequestedAddress" type="IPAddress" />		
+		</Event>
+		<Event name="ArpResponse">
+			<Field name="Result" type="PhysicalAddress" />
+			<Field name="RequestedAddress" type="IPAddress" />
+		</Event>
+		
+		<Event name="Alert">
+		
+		</Event>
+		
+		<StateMachine name="Arp State Machine">
+			<Event name="ThresholdTimeout" />
+		
+			<State name="RequestHalfCycle" />
+			<State name="ResponseHalfCycle" />
+			<State name="FullCycle" />
+			
+			<Transition name="Init..Request" initial="true" event="ArpRequest" to="RequestHalfCycle" />
+			<Transition name="Init..Response" initial="true" event="ArpResponse" to="ResponseHalfCycle" />
+			
+			<Transition name="Request..Request" from="RequestHalfCycle" event="ArpRequest" to="RequestHalfCycle" />
+			<Transition name="Request..Response" from="RequestHalfCycle" event="ArpResponse" to="FullCycle" />
+			<Transition name="Request..Timeout" from="RequestHalfCycle" event="ThresholdTimeout" final="true" />
+			
+			<Transition name="Response..Request" from="ResponseHalfCycle" event="ArpRequest" to="RequestHalfCycle" />
+			<Transition name="Response..Response" from="ResponseHalfCycle" event="ArpResponse" publish="Alert" final="true" />
+			<Transition name="Response..Timeout" from="ResponseHalfCycle" event="ThresholdTimeout" final="true" />
+			
+			<Transition name="FullCycle..Request" from="FullCycle" event="ArpRequest" to="RequestHalfCycle" />
+			<Transition name="FullCycle..Response" from="FullCycle" event="ArpResponse" publish="Alert" final="true" />
+			<Transition name="FullCycle..Timeout" from="FullCycle" event="ThresholdTimeout" final="true" />
+			
+			<Schedule name="Threshold" delay="3000" event="ThresholdTimeout" />
+		</StateMachine>
+	</Ids>
+
+</_>
