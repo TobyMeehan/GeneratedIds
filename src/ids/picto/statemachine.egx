@@ -1,0 +1,26 @@
+rule StateMachine2Graphviz 
+	transform machine : ids::StateMachine {
+
+	template : "statemachine2graphviz.egl"
+	
+	parameters : Map {
+		
+		"path" = Sequence{"StateMachine"},
+		"icon" = "diagram-ffffff",
+		"format" = "graphviz-dot",
+		"layers" = Sequence {
+			
+			Map {"id"="states", "title"="States", "active"=true},
+			Map {"id"="transitions", "title"="Transitions", "active"=true},
+			Map {"id"="schedules", "title"="Schedules", "active"=true}
+			
+		},
+		"name" = machine.name,
+		"states" = machine.states,
+		"transitions" = machine.transitions,
+		"events" = machine.events,
+		"schedules" = machine.schedules
+		
+	}
+	
+}

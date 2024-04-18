@@ -1,0 +1,18 @@
+digraph G {
+
+	"Initial"
+
+
+	[%for (state in states) {%]
+	
+		"[%=state.name%]"
+	
+	[%}%]
+	
+	[%for (transition in transitions.select(t|t.to != null)) {%]
+	
+		"[%=(transition.from != null ? transition.from.name : "Initial")%]" -> "[%=(transition.to != null ? transition.to.name : "Initial")%]" [label="[%=transition.event.name%]"]
+	
+	[%}%]
+
+}
