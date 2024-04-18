@@ -1,0 +1,7 @@
+[% for (using in fields.collect(field|field.type.namespace).asSet()) { %]
+using [%=using%];
+[% } %]
+
+namespace [%=namespace%];
+
+public record [%=className%]([%=fields.collect(field|field.type.name + " " + field.name).concat(", ")%]);
