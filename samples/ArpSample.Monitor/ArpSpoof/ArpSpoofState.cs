@@ -1,9 +1,9 @@
 using System.Net;
 using MassTransit;
 
-namespace ArpSample.StateMachines;
+namespace ArpSample.Monitor.ArpSpoof;
 
-public class ArpState : SagaStateMachineInstance
+public class ArpSpoofState : SagaStateMachineInstance
 {
     public IPAddress RequestedAddress { get; set; }
 

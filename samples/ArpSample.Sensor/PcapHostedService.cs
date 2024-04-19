@@ -1,19 +1,22 @@
 using MassTransit;
 using SharpPcap;
+using Packet = PacketDotNet.Packet;
 
-namespace ArpSample;
+namespace ArpSample.Sensor;
 
 public class PcapHostedService : IHostedService
 {
     private readonly ILogger<PcapHostedService> _logger;
     private readonly IBus _bus;
     private readonly ILiveDevice _device;
+    private readonly IPacketMatch _packetMatch;
 
-    public PcapHostedService(ILogger<PcapHostedService> logger, IBus bus, ILiveDevice device)
+    public PcapHostedService(ILogger<PcapHostedService> logger, IBus bus, ILiveDevice device, IPacketMatch packetMatch)
     {
         _logger = logger;
         _bus = bus;
         _device = device;
+        _packetMatch = packetMatch;
     }
     
     public Task StartAsync(CancellationToken cancellationToken)
@@ -33,7 +36,16 @@ public class PcapHostedService : IHostedService
 
     private async Task PublishPacketAsync(RawCapture capture)
     {
-        
+        var packet = Packet.ParsePacket(capture.LinkLayerType, capture.Data);
+
+        object? @event = _packetMatch.ParseEvent(packet);
+
+        if (@event is null)
+        {
+            return;
+        }
+
+        await _bus.Publish(@event);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
