@@ -1,0 +1,8 @@
+using PacketDotNet;
+
+namespace [%=namespace%];
+
+public interface IPacketMatch
+{
+    object? ParseEvent(Packet packet);
+}

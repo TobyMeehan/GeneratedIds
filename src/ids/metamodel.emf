@@ -26,21 +26,19 @@ class Event {
 	val Field[*] fields;
 	
 	ref Ids#events ids;
-	ref StateMachine#events stateMachine;
 }
 
 
 class StateMachine {
 	attr String name;
+	attr TimeSpan timeout;
 	
 	ref Ids#stateMachines ids;
 	
-	ref Event[*] consumes;
+	ref Event[*] events;
 	
-	val Event[*]#stateMachine events;
 	val State[*] states;
 	val Transition[*] transitions;
-	val Schedule[*] schedules;
 	val Field[*] fields;
 }
 
@@ -54,17 +52,10 @@ class State {
 class Transition {
 	attr String name;
 	attr boolean alert;
+	attr boolean resetTimeout = true;
 
 	ref State#incoming to;
 	ref State#outgoing from;
 
-	ref Event event;
-	ref Schedule[*] schedule;
-	ref Schedule[*] unschedule;
-}
-
-class Schedule {
-	attr String name;
-	attr TimeSpan delay; 
 	ref Event event;
 }

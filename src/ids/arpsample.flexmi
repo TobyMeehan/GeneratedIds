@@ -9,15 +9,14 @@
 	<Ids name="ArpDetectionSystem">
 		<Event name="ArpRequest">
 			<Field name="Source" type="PhysicalAddress" />
-			<Field name="RequestedAddress" type="IPAddress" />		
+			<Field name="RequestedAddress" type="IPAddress" /> 
 		</Event>
 		<Event name="ArpResponse">
 			<Field name="Result" type="PhysicalAddress" />
 			<Field name="RequestedAddress" type="IPAddress" />
 		</Event>
 		
-		<StateMachine name="ArpSpoof" consumes="ArpRequest, ArpResponse">
-			<Event name="ThresholdTimeout" /> 
+		<StateMachine name="ArpSpoof" timeout="30" events="ArpRequest, ArpResponse">
 			
 			<Field name="RequestedAddress" type="IPAddress" />
 		
@@ -30,17 +29,12 @@
 			
 			<Transition name="Request..Request" from="RequestHalfCycle" event="ArpRequest" to="RequestHalfCycle" />
 			<Transition name="Request..Response" from="RequestHalfCycle" event="ArpResponse" to="FullCycle" />
-			<Transition name="Request..Timeout" from="RequestHalfCycle" event="ThresholdTimeout" />
 			
 			<Transition name="Response..Request" from="ResponseHalfCycle" event="ArpRequest" to="RequestHalfCycle" />
 			<Transition name="Response..Response" from="ResponseHalfCycle" event="ArpResponse" alert="true" />
-			<Transition name="Response..Timeout" from="ResponseHalfCycle" event="ThresholdTimeout" />
 			
 			<Transition name="FullCycle..Request" from="FullCycle" event="ArpRequest" to="RequestHalfCycle" />
 			<Transition name="FullCycle..Response" from="FullCycle" event="ArpResponse" alert="true" />
-			<Transition name="FullCycle..Timeout" from="FullCycle" event="ThresholdTimeout" />
-			
-			<Schedule name="Threshold" delay="60" event="ThresholdTimeout" />
 		</StateMachine>
 	</Ids>
 

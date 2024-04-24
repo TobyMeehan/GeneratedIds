@@ -1,0 +1,16 @@
+using [%=eventNamespace%];
+using PacketDotNet;
+
+namespace [%=namespace%];
+
+public class PacketMatch : IPacketMatch
+{
+    public object? ParseEvent(Packet packet) => packet switch
+    {
+    	[% for (event in events) { %]
+    	[%=out.preserve("/*", "*/", "Match "+event.name, true, event.name.ftlc())%] => new [%=event.name%]([%=out.preserve("/*", "*/", event.name+" Fields", true, "")%]),
+    	[% } %]
+        
+        _ => null
+    };
+}

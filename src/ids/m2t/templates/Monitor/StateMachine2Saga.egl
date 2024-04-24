@@ -1,0 +1,68 @@
+using [%=eventNamespace%];
+using [%=customEventNamespace%];
+using [%=sagaEventNamespace%];
+using MassTransit;
+
+namespace [%=namespace%];
+
+public class [%=className%] : MassTransitStateMachine<[%=stateTypeName%]>
+{
+    public [%=className%]()
+    {
+        InstanceState(x => x.CurrentState);
+
+		[% for (event in events) { %]
+		Event(() => [%=event.name%], x => 
+		{
+			[%=out.startPreserve("/*", "*/", "Correlate " + event.name, true)%]
+			x.CorrelateById();
+			[%=out.stopPreserve()%]
+		});
+		
+		[% } %]
+		
+		Schedule(() => TimeoutSchedule, 
+            x => x.CorrelationId, 
+            x => x.Delay = TimeSpan.FromSeconds([%=timeout%]));
+	
+		Initially(
+			[%=initialTransitions.collect(transition|transition.toDefinition()).concat(", ")%]
+		);
+		
+		[% for (state in states) { %]
+		During([%=state.name%],
+			[%=state.outgoing.collect(transition|transition.toDefinition()).concat(", ")%]
+		);
+		
+		[% } %]
+    }
+
+	[% for (state in states) { %]
+	public State [%=state.name%] { get; } = default!;
+	[% } %]
+	
+	public Schedule<[%=stateTypeName%], TimeoutSchedule> TimeoutSchedule { get; } = default!;
+	
+	[% for (event in events) { %]
+	public Event<[%=event.name%]> [%=event.name%] { get; } = default!;
+	[% } %]
+	public Event<Timeout> Timeout { get; } = default!;
+}
+
+
+[%	@template 
+	operation Transition toDefinition() { %]
+	When([%=self.event.name%])
+		[% if (self.resetTimeout) { %]
+		.Unschedule(TimeoutSchedule)
+		[% } %]
+		[% if (self.from == null) { %]
+		.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
+		[% } %]
+		[% if(self.to != null) { %]
+		.TransitionTo([%=self.to.name%])
+		[% } else { %]
+		.Finalize()
+		[% } %]
+[% } %]
+

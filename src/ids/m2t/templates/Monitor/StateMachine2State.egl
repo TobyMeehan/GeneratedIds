@@ -1,0 +1,16 @@
+using MassTransit;
+[% for (using in fields.collect(field|field.type.namespace).asSet()) { %]
+using [%=using%];
+[% } %]
+
+namespace [%=namespace%];
+
+public class [%=className%] : SagaStateMachineInstance
+{
+	[% for (field in fields) { %]
+	public [%=field.type.name%] [%=field.name%] { get; set; }
+	[% } %]
+
+    public int CurrentState { get; set; }
+    public Guid CorrelationId { get; set; }
+}

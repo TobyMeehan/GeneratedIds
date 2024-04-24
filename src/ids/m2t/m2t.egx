@@ -1,0 +1,251 @@
+pre {
+	var outDir = "gen/src/";
+}
+
+//
+//	EVENTS
+//
+
+rule Ids2EventCsproj transform ids : ids::Ids {
+
+	template : "templates/Events/Ids2Csproj.egl"
+	
+	parameters : Map {}
+	
+	target : outDir+ids.name+".Events/"+ids.name+".Events.csproj"
+
+}
+
+rule Ids2Alert transform ids : ids::Ids {
+	
+	template : "templates/Events/Ids2Alert.egl"
+	
+	parameters : Map {
+	
+		"namespace" = ids.name+".Events"
+	
+	}
+	
+	target : outDir+ids.name+".Events/Alert.cs"
+	
+}
+
+rule Event2Record transform event : ids::Event {
+	
+	pre {
+		
+	}
+	
+	template : "templates/Events/Event2Record.egl"
+	
+	parameters : Map {
+	
+		"namespace" = event.ids.name+".Events.Custom",
+		"className" = event.name,
+		"fields" = event.fields
+	
+	}
+	
+	target : outDir+event.ids.name+".Events/Custom/"+event.name+".cs"
+		
+}
+
+//
+//	MONITOR
+//
+
+rule Ids2MonitorCsproj transform ids : ids::Ids {
+
+	template : "templates/Monitor/Ids2Csproj.egl"
+	
+	parameters : Map {
+	
+		"eventProject" = ids.name+".Events"
+	
+	}
+	
+	target : outDir+ids.name+".Monitor/"+ids.name+".Monitor.csproj"
+
+}
+
+rule Ids2MonitorDockerfile transform ids : ids::Ids {
+
+	template : "templates/Monitor/Ids2Dockerfile.egl"
+	
+	parameters : Map {
+	
+		"project" = ids.name+".Monitor"
+	
+	}
+	
+	target : outDir+ids.name+".Monitor/Dockerfile"
+
+}
+
+rule Ids2MonitorProgram transform ids : ids::Ids {
+
+	template : "templates/Monitor/Ids2Program.egl"
+	
+	parameters : Map {}
+	
+	target : outDir+ids.name+".Monitor/Program.cs"
+
+}
+
+rule Ids2MonitorAppsettings transform ids : ids::Ids {
+
+	template : "templates/Monitor/Ids2Appsettings.egl"
+	
+	parameters : Map {}
+	
+	target : outDir+ids.name+".Monitor/appsettings.json"
+
+}
+
+rule StateMachine2Saga transform machine : ids::StateMachine {
+	
+	template : "templates/Monitor/StateMachine2Saga.egl"
+	
+	parameters : Map {
+		
+		"namespace" = machine.ids.name+".Monitor."+machine.name,
+		"eventNamespace" = machine.ids.name+".Events",
+		"customEventNamespace" = machine.ids.name+".Events.Custom",
+		"sagaEventNamespace" = machine.ids.name+".Monitor."+machine.name+".Events",
+		"className" = machine.name+"StateMachine",
+		"stateTypeName" = machine.name+"State",
+		
+		"timeout" = machine.timeout,
+		"events" = machine.events,
+		"states" = machine.states,
+		"initialTransitions" = machine.transitions.select(transition|transition.from == null)
+		
+	}	
+	
+	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/"+machine.name+"StateMachine.cs"
+}
+
+rule StateMachine2State transform machine : ids::StateMachine {
+
+	template : "templates/Monitor/StateMachine2State.egl"
+	
+	parameters : Map {
+	
+		"namespace" = machine.ids.name+".Monitor."+machine.name,
+		"className" = machine.name+"State",
+		"fields" = machine.fields
+	
+	}
+	
+	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/"+machine.name+"State.cs"
+	
+}
+
+rule StateMachine2TimeoutEvent transform machine : ids::StateMachine {
+
+	template : "templates/Monitor/StateMachine2TimeoutEvent.egl"
+	
+	parameters : Map {
+		
+		"namespace" = machine.ids.name+".Monitor."+machine.name+".Events"
+		
+	}
+	
+	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/Events/Timeout.cs"
+
+}
+
+//
+//	SENSOR
+//
+
+rule Ids2SensorCsproj transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2Csproj.egl"
+	
+	parameters : Map {
+	
+		"eventProject" = ids.name+".Events"
+	
+	}
+	
+	target : outDir+ids.name+".Sensor/"+ids.name+".Sensor.csproj"
+
+}
+
+rule Ids2SensorDockerfile transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2Dockerfile.egl"
+	
+	parameters : Map {
+	
+		"project" = ids.name+".Sensor"
+		
+	}
+	
+	target : outDir+ids.name+".Sensor/Dockerfile"
+	
+}
+
+rule Ids2SensorProgram transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2Program.egl"
+	
+	parameters : Map {}
+	
+	target : outDir+ids.name+".Sensor/Program.cs"
+
+}
+
+rule Ids2SensorAppsettings transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2Appsettings.egl"
+	
+	parameters : Map {}
+	
+	target : outDir+ids.name+".Sensor/appsettings.json"
+
+}
+
+rule Ids2IPacketMatch transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2IPacketMatch.egl"
+	
+	parameters : Map {
+	
+		"namespace" = ids.name+".Sensor"
+	
+	}
+	
+	target : outDir+ids.name+".Sensor/IPacketMatch.cs"
+
+}
+
+rule Ids2PacketMatch transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2PacketMatch.egl"
+	
+	parameters : Map {
+	
+		"namespace" = ids.name+".Sensor",
+		"eventNamespace" = ids.name+".Events.Custom",
+		"events" = ids.events
+	}
+	
+	target : outDir+ids.name+".Sensor/PacketMatch.cs"
+
+}
+
+rule Ids2PcapHostedService transform ids : ids::Ids {
+
+	template : "templates/Sensor/Ids2PcapHostedService.egl"
+	
+	parameters : Map {
+	
+		"namespace" = ids.name+".Sensor"
+	
+	}
+	
+	target : outDir+ids.name+".Sensor/PcapHostedService.cs"
+
+}
