@@ -11,15 +11,13 @@ rule StateMachine2Graphviz
 		"layers" = Sequence {
 			
 			Map {"id"="states", "title"="States", "active"=true},
-			Map {"id"="transitions", "title"="Transitions", "active"=true},
-			Map {"id"="schedules", "title"="Schedules", "active"=true}
+			Map {"id"="transitions", "title"="Transitions", "active"=true}
 			
 		},
 		"name" = machine.name,
 		"states" = machine.states,
 		"transitions" = machine.transitions,
-		"events" = machine.events,
-		"schedules" = machine.schedules
+		"events" = machine.events
 		
 	}
 	

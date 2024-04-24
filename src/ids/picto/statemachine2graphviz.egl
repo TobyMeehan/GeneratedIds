@@ -14,5 +14,11 @@ digraph G {
 		"[%=(transition.from != null ? transition.from.name : "Initial")%]" -> "[%=(transition.to != null ? transition.to.name : "Initial")%]" [label="[%=transition.event.name%]"]
 	
 	[%}%]
+	
+	[% for (transition in transitions.select(t|t.alert)) { %]
+	
+		"[%=(transition.from != null ? transition.from.name : "Initial")%]" -> "Alert" [label="[%=transition.event.name%]"]
+	
+	[% } %]
 
 }
