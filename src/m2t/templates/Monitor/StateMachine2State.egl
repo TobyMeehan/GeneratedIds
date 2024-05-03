@@ -13,4 +13,5 @@ public class [%=className%] : SagaStateMachineInstance
 
     public int CurrentState { get; set; }
     public Guid CorrelationId { get; set; }
+	public Guid? TimeoutTokenId { get; set; }
 }

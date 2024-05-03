@@ -10,7 +10,7 @@ public class [%=className%] : MassTransitStateMachine<[%=stateTypeName%]>
 {
     public [%=className%]()
     {
-        InstanceState(x => x.CurrentState);
+        InstanceState(x => x.CurrentState, RequestHalfCycle, ResponseHalfCycle, FullCycle);
 
 		[% for (event in events) { %]
 		Event(() => [%=event.name%], x => 
@@ -26,10 +26,14 @@ public class [%=className%] : MassTransitStateMachine<[%=stateTypeName%]>
 		{
 			x.CorrelateById(context => context.Message.CorrelationId);
 		});
-		
+
 		Schedule(() => TimeoutSchedule, 
-            x => x.CorrelationId, 
-            x => x.Delay = TimeSpan.FromSeconds([%=timeout%]));
+			x => x.TimeoutTokenId, 
+			s =>
+			{
+				s.Delay = TimeSpan.FromSeconds([%=timeout%]);
+				s.Received = r => r.CorrelateById(context => context.Message.CorrelationId);
+			});
 	
 		Initially(
 			[%=initialTransitions.collect(transition|transition.toDefinition()).concat(", ")%]
@@ -58,13 +62,22 @@ public class [%=className%] : MassTransitStateMachine<[%=stateTypeName%]>
 
 [%	@template 
 	operation Transition toDefinition() { %]
+
+	// [%=self.name%]
 	When([%=self.event.name%])
 		[% if (self.resetTimeout) { %]
+		// Reset timeout
 		.Unschedule(TimeoutSchedule)
 		[% } %]
-		[% if (self.from == null) { %]
+		[% if (self.from == null or self.resetTimeout) { %]
 		.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
+
 		[% } %]
+		[% if (self.alert) { %]
+		// Publish alert
+		.Publish(new Alert("Alert!"))
+		
+		[% }%]
 		[% if(self.to != null) { %]
 		.TransitionTo([%=self.to.name%])
 		[% } else { %]

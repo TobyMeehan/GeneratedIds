@@ -5,8 +5,9 @@ namespace ArpDetectionSystem.Monitor.ArpSpoof;
 
 public class ArpSpoofState : SagaStateMachineInstance
 {
-	public IPAddress RequestedAddress { get; set; }
+	public string RequestedIp { get; set; }
 
     public int CurrentState { get; set; }
     public Guid CorrelationId { get; set; }
+    public Guid? TimeoutTokenId { get; set; }
 }

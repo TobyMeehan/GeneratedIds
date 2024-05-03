@@ -10,16 +10,16 @@ public class ArpSpoofStateMachine : MassTransitStateMachine<ArpSpoofState>
 {
     public ArpSpoofStateMachine()
     {
-        InstanceState(x => x.CurrentState);
+        InstanceState(x => x.CurrentState, RequestHalfCycle, ResponseHalfCycle, FullCycle);
 
 		Event(() => ArpRequest, x => 
 		{
 			/* protected region Correlate ArpRequest on begin */
-			x.CorrelateBy(state => state.RequestedAddress, ctx => ctx.Message.RequestedAddress);
+			x.CorrelateBy(state => state.RequestedIp, ctx => ctx.Message.RequestedIp);
 			x.SetSagaFactory(context => new ArpSpoofState
 			{
 				CorrelationId = context.CorrelationId ?? NewId.NextGuid(),
-				RequestedAddress = context.Message.RequestedAddress
+				RequestedIp = context.Message.RequestedIp
 			});
 			x.SelectId(_ => NewId.NextGuid());
 			/* protected region Correlate ArpRequest end */
@@ -28,61 +28,85 @@ public class ArpSpoofStateMachine : MassTransitStateMachine<ArpSpoofState>
 		Event(() => ArpResponse, x => 
 		{
 			/* protected region Correlate ArpResponse on begin */
-			x.CorrelateBy(state => state.RequestedAddress, ctx => ctx.Message.RequestedAddress);
+			x.CorrelateBy(state => state.RequestedIp, ctx => ctx.Message.RequestedIp);
 			x.SetSagaFactory(context => new ArpSpoofState
 			{
 				CorrelationId = context.CorrelationId ?? NewId.NextGuid(),
-				RequestedAddress = context.Message.RequestedAddress
+				RequestedIp = context.Message.RequestedIp
 			});
 			x.SelectId(_ => NewId.NextGuid());
 			/* protected region Correlate ArpResponse end */
 		});
-
-		Event(() => Timeout, x =>
-		{
-			x.CorrelateById(context => context.Message.CorrelationId);
-		});
-		
 		
 		Schedule(() => TimeoutSchedule, 
-            x => x.CorrelationId, 
-            x => x.Delay = TimeSpan.FromSeconds(30));
+			x => x.TimeoutTokenId, 
+			s =>
+		{
+			s.Delay = TimeSpan.FromSeconds(30);
+			s.Received = r => r.CorrelateById(context => context.Message.CorrelationId);
+		});
 	
 		Initially(
+			
+				// Init2Request
 				When(ArpRequest)
-					.Unschedule(TimeoutSchedule)
 					.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
 					.TransitionTo(RequestHalfCycle)
+				
+				// Init2Response
 			, 	When(ArpResponse)
-					.Unschedule(TimeoutSchedule)
 					.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
 					.TransitionTo(ResponseHalfCycle)
 		);
 		
 		During(RequestHalfCycle,
+			
+				// Request2Request
 				When(ArpRequest)
+					// Reset timeout
 					.Unschedule(TimeoutSchedule)
+					.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
+					
 					.TransitionTo(RequestHalfCycle)
+			
+				// Request2Response
 			, 	When(ArpResponse)
-					.Unschedule(TimeoutSchedule)
 					.TransitionTo(FullCycle)
 		);
 		
 		During(ResponseHalfCycle,
+			
+				// Response2Request
 				When(ArpRequest)
+					// Reset timeout
 					.Unschedule(TimeoutSchedule)
+					.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
+					
 					.TransitionTo(RequestHalfCycle)
+					
+				// Response2Response
 			, 	When(ArpResponse)
-					.Unschedule(TimeoutSchedule)
+					// Publish alert
+					.Publish(new Alert("Alert!"))
+					
 					.Finalize()
 		);
 		
 		During(FullCycle,
+			
+				// FullCycle2Request
 				When(ArpRequest)
+					// Reset timeout
 					.Unschedule(TimeoutSchedule)
+					.Schedule(TimeoutSchedule, context => new Timeout(context.Saga.CorrelationId))
+					
 					.TransitionTo(RequestHalfCycle)
+				
+				// FullCycle2Response
 			, 	When(ArpResponse)
-					.Unschedule(TimeoutSchedule)
+					// Publish alert
+					.Publish(new Alert("Alert!"))
+					
 					.Finalize()
 		);
 		
@@ -96,7 +120,6 @@ public class ArpSpoofStateMachine : MassTransitStateMachine<ArpSpoofState>
 	
 	public Event<ArpRequest> ArpRequest { get; } = default!;
 	public Event<ArpResponse> ArpResponse { get; } = default!;
-	public Event<Timeout> Timeout { get; } = default!;
 }
 
 

@@ -14,8 +14,8 @@ public class PacketMatch : IPacketMatch
 		    => new ArpRequest(
 			
 			    /* protected region ArpRequest Fields on begin */
-			    arpRequest.SenderHardwareAddress, 
-			    arpRequest.TargetProtocolAddress
+			    arpRequest.SenderHardwareAddress.ToString(), 
+			    arpRequest.TargetProtocolAddress.ToString()
 			    /* protected region ArpRequest Fields end */
 			    
 		    ),
@@ -27,8 +27,8 @@ public class PacketMatch : IPacketMatch
 		    => new ArpResponse(
 			
 			    /* protected region ArpResponse Fields on begin */
-			    arpResponse.SenderHardwareAddress, 
-			    arpResponse.TargetProtocolAddress
+			    arpResponse.SenderHardwareAddress.ToString(), 
+			    arpResponse.TargetProtocolAddress.ToString()
 			    /* protected region ArpResponse Fields end */
 		    ),
         

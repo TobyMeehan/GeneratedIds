@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Sensor",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Monitor", "src\gen\ArpDetectionSystem.Monitor\ArpDetectionSystem.Monitor.csproj", "{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6C1A25D1-C782-4D90-A41A-ECB433493F54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Monitor.Tests", "tests\ArpDetectionSystem.Monitor.Tests\ArpDetectionSystem.Monitor.Tests.csproj", "{EA1A36B2-54FD-4A3A-A34E-F313A73D160D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,7 @@ Global
 		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
 		{E70793DB-3F3B-4734-8C7F-D933864E0731} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
 		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
+		{EA1A36B2-54FD-4A3A-A34E-F313A73D160D} = {6C1A25D1-C782-4D90-A41A-ECB433493F54}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7E2A39DD-04BC-40D1-A3C8-D8FD4C1CB8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -54,5 +59,9 @@ Global
 		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA1A36B2-54FD-4A3A-A34E-F313A73D160D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA1A36B2-54FD-4A3A-A34E-F313A73D160D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA1A36B2-54FD-4A3A-A34E-F313A73D160D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA1A36B2-54FD-4A3A-A34E-F313A73D160D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

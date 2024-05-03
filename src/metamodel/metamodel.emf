@@ -52,7 +52,7 @@ class State {
 class Transition {
 	attr String name;
 	attr boolean alert;
-	attr boolean resetTimeout = true;
+	attr boolean resetTimeout;
 
 	ref State#incoming to;
 	ref State#outgoing from;

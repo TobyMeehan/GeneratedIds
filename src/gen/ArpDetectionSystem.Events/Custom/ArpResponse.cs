@@ -3,4 +3,4 @@ using System.Net;
 
 namespace ArpDetectionSystem.Events.Custom;
 
-public record ArpResponse(PhysicalAddress Result, IPAddress RequestedAddress);
+public record ArpResponse(string ResultMac, string RequestedIp);
