@@ -1,5 +1,5 @@
 pre {
-	var outDir = "gen/src/";
+	var outDir = "../gen/";
 }
 
 //
