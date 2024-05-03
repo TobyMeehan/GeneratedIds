@@ -2,6 +2,7 @@ using ArpDetectionSystem.Events;
 using ArpDetectionSystem.Events.Custom;
 using ArpDetectionSystem.Monitor.ArpSpoof.Events;
 using MassTransit;
+using Timeout = ArpDetectionSystem.Monitor.ArpSpoof.Events.Timeout;
 
 namespace ArpDetectionSystem.Monitor.ArpSpoof;
 
@@ -14,15 +15,32 @@ public class ArpSpoofStateMachine : MassTransitStateMachine<ArpSpoofState>
 		Event(() => ArpRequest, x => 
 		{
 			/* protected region Correlate ArpRequest on begin */
-			x.CorrelateById();
+			x.CorrelateBy(state => state.RequestedAddress, ctx => ctx.Message.RequestedAddress);
+			x.SetSagaFactory(context => new ArpSpoofState
+			{
+				CorrelationId = context.CorrelationId ?? NewId.NextGuid(),
+				RequestedAddress = context.Message.RequestedAddress
+			});
+			x.SelectId(_ => NewId.NextGuid());
 			/* protected region Correlate ArpRequest end */
 		});
 		
 		Event(() => ArpResponse, x => 
 		{
 			/* protected region Correlate ArpResponse on begin */
-			x.CorrelateById();
+			x.CorrelateBy(state => state.RequestedAddress, ctx => ctx.Message.RequestedAddress);
+			x.SetSagaFactory(context => new ArpSpoofState
+			{
+				CorrelationId = context.CorrelationId ?? NewId.NextGuid(),
+				RequestedAddress = context.Message.RequestedAddress
+			});
+			x.SelectId(_ => NewId.NextGuid());
 			/* protected region Correlate ArpResponse end */
+		});
+
+		Event(() => Timeout, x =>
+		{
+			x.CorrelateById(context => context.Message.CorrelationId);
 		});
 		
 		
@@ -74,7 +92,7 @@ public class ArpSpoofStateMachine : MassTransitStateMachine<ArpSpoofState>
 	public State ResponseHalfCycle { get; } = default!;
 	public State FullCycle { get; } = default!;
 	
-	public Schedule<ArpSpoofState, TimeoutSchedule> TimeoutSchedule { get; } = default!;
+	public Schedule<ArpSpoofState, Timeout> TimeoutSchedule { get; } = default!;
 	
 	public Event<ArpRequest> ArpRequest { get; } = default!;
 	public Event<ArpResponse> ArpResponse { get; } = default!;

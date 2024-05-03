@@ -1,3 +1,4 @@
+using ArpDetectionSystem.Sensor;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);

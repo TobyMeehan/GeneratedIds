@@ -8,6 +8,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpSample.Events", "samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpSample.Monitor", "samples\ArpSample.Monitor\ArpSample.Monitor.csproj", "{4701A12C-6924-44FC-B825-E17878B5F225}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src-gen", "src-gen", "{9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Events", "src\gen\ArpDetectionSystem.Events\ArpDetectionSystem.Events.csproj", "{E94BE652-CDB5-49EB-91CD-7F79B8BC354B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Sensor", "src\gen\ArpDetectionSystem.Sensor\ArpDetectionSystem.Sensor.csproj", "{E70793DB-3F3B-4734-8C7F-D933864E0731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArpDetectionSystem.Monitor", "src\gen\ArpDetectionSystem.Monitor\ArpDetectionSystem.Monitor.csproj", "{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +25,9 @@ Global
 		{7E2A39DD-04BC-40D1-A3C8-D8FD4C1CB8DD} = {03665047-8382-4703-B7D9-4D17AB15163A}
 		{A6BA096D-295C-4103-A396-B303821DBA55} = {03665047-8382-4703-B7D9-4D17AB15163A}
 		{4701A12C-6924-44FC-B825-E17878B5F225} = {03665047-8382-4703-B7D9-4D17AB15163A}
+		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
+		{E70793DB-3F3B-4734-8C7F-D933864E0731} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
+		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7} = {9A289A2D-F5A7-4A49-8014-13FF5DA5A9C9}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7E2A39DD-04BC-40D1-A3C8-D8FD4C1CB8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -31,5 +42,17 @@ Global
 		{4701A12C-6924-44FC-B825-E17878B5F225}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4701A12C-6924-44FC-B825-E17878B5F225}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4701A12C-6924-44FC-B825-E17878B5F225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E94BE652-CDB5-49EB-91CD-7F79B8BC354B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70793DB-3F3B-4734-8C7F-D933864E0731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70793DB-3F3B-4734-8C7F-D933864E0731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70793DB-3F3B-4734-8C7F-D933864E0731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70793DB-3F3B-4734-8C7F-D933864E0731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDC3B47A-174D-4EC4-B620-C3682B1B02F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

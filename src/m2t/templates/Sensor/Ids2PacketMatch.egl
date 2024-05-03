@@ -8,7 +8,19 @@ public class PacketMatch : IPacketMatch
     public object? ParseEvent(Packet packet) => packet switch
     {
     	[% for (event in events) { %]
-    	[%=out.preserve("/*", "*/", "Match "+event.name, true, event.name.ftlc())%] => new [%=event.name%]([%=out.preserve("/*", "*/", event.name+" Fields", true, "")%]),
+
+        [%=out.startPreserve("/*", "*/", "Match " + event.name, true)%]
+        { } [%=event.name.ftlc()%]
+        [%=out.stopPreserve()%]
+
+            => new [%=event.name%](
+
+                [%=out.startPreserve("/*", "*/", event.name+" Fields", true%)]
+
+                [%=out.stopPreserve()%]
+
+            ),
+
     	[% } %]
         
         _ => null

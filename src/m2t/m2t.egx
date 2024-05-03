@@ -191,7 +191,11 @@ rule Ids2SensorProgram transform ids : ids::Ids {
 
 	template : "templates/Sensor/Ids2Program.egl"
 	
-	parameters : Map {}
+	parameters : Map {
+
+		"namespace" = ids.name+".Sensor"
+
+	}
 	
 	target : outDir+ids.name+".Sensor/Program.cs"
 
