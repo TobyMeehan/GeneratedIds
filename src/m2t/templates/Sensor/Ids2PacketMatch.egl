@@ -15,7 +15,7 @@ public class PacketMatch : IPacketMatch
 
             => new [%=event.name%](
 
-                [%=out.startPreserve("/*", "*/", event.name+" Fields", true%)]
+                [%=out.startPreserve("/*", "*/", event.name+" Fields", true)%]
 
                 [%=out.stopPreserve()%]
 

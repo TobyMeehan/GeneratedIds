@@ -1,5 +1,4 @@
-rule StateMachine2Graphviz 
-	transform machine : ids::StateMachine {
+rule StateMachine2Graphviz {
 
 	template : "statemachine2graphviz.egl"
 	
@@ -14,11 +13,7 @@ rule StateMachine2Graphviz
 			Map {"id"="transitions", "title"="Transitions", "active"=true}
 			
 		},
-		"name" = machine.name,
-		"states" = machine.states,
-		"transitions" = machine.transitions,
-		"events" = machine.events
-		
+		"attacks" = Attack.allInstances()
 	}
 	
 }

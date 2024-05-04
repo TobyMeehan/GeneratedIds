@@ -1,3 +1,3 @@
-namespace ArpDetectionSystem.Events;
+namespace Ids.Events;
 
 public record Alert(string Message);

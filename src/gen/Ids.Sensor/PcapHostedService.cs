@@ -2,7 +2,7 @@ using MassTransit;
 using SharpPcap;
 using Packet = PacketDotNet.Packet;
 
-namespace ArpDetectionSystem.Sensor;
+namespace Ids.Sensor;
 
 public class PcapHostedService : IHostedService
 {

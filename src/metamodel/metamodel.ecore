@@ -2,13 +2,6 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ids" nsURI="ids" nsPrefix="">
   <eClassifiers xsi:type="ecore:EDataType" name="TimeSpan" instanceClassName="int"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Ids">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
-        eType="#//Event" containment="true" eOpposite="#//Event/ids"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachines" upperBound="-1"
-        eType="#//StateMachine" containment="true" eOpposite="#//StateMachine/ids"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Field">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type"/>
@@ -21,12 +14,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
         eType="#//Field" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ids" eType="#//Ids" eOpposite="#//Ids/events"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+  <eClassifiers xsi:type="ecore:EClass" name="Attack">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeout" eType="#//TimeSpan"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ids" eType="#//Ids" eOpposite="#//Ids/stateMachines"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
         eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
@@ -46,8 +37,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Transition">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alert" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resetTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resetTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//State" eOpposite="#//State/incoming"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//State"
         eOpposite="#//State/outgoing"/>

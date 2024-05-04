@@ -1,24 +1,27 @@
 digraph G {
+	node[fontname=Tahoma, fontsize=15, style="filled", fillcolor="#6fa8dc"]
+	edge[fontname=Tahoma, fontsize=12]
 
-	"Initial"
-
-
-	[%for (state in states) {%]
-	
-		"[%=state.name%]"
-	
-	[%}%]
-	
-	[%for (transition in transitions.select(t|t.to != null)) {%]
-	
-		"[%=(transition.from != null ? transition.from.name : "Initial")%]" -> "[%=(transition.to != null ? transition.to.name : "Initial")%]" [label="[%=transition.event.name%]"]
-	
-	[%}%]
-	
-	[% for (transition in transitions.select(t|t.alert)) { %]
-	
-		"[%=(transition.from != null ? transition.from.name : "Initial")%]" -> "Alert" [label="[%=transition.event.name%]"]
-	
+	[% for (attack in attacks) { %]
+	subgraph [%=attack.name%] {
+		[% var initialNode = attack.name+"Initial"; %]
+		[% var compromisedNode = attack.name+"Compromised"; %]
+		node [fillcolor="#6aa84f",label="Initial"] "[%=initialNode%]";
+		node [fillcolor="#cc0000ff",label="Compromised"] "[%=compromisedNode%]";
+		
+		[%for (state in attack.states) {%]
+		node [fillcolor="#6fa8dc",label="[%=state.name%]"] "[%=attack.name+state.name%]" 
+		[%}%]
+		
+		[%for (transition in attack.transitions.select(t|t.to != null)) {%]
+		"[%=(transition.from != null ? attack.name+transition.from.name : initialNode)%]" -> "[%=(transition.to != null ? attack.name+transition.to.name : initialNode)%]" [label="[%=transition.event.name%]"]
+		[%}%]
+		
+		[% for (transition in attack.transitions.select(t|t.alert)) { %]
+		"[%=(transition.from != null ? attack.name+transition.from.name : initialNode)%]" -> [%=compromisedNode%] [label="[%=transition.event.name%]"]
+		[% } %]
+		
+		label="[%=attack.name%]"
+	}
 	[% } %]
-
 }

@@ -1,52 +1,49 @@
 pre {
 	var outDir = "../gen/";
+	var idsName = "Ids";
 }
 
 //
 //	EVENTS
 //
 
-rule Ids2EventCsproj transform ids : ids::Ids {
+rule Ids2EventCsprojs {
 
 	template : "templates/Events/Ids2Csproj.egl"
 	
 	parameters : Map {}
 	
-	target : outDir+ids.name+".Events/"+ids.name+".Events.csproj"
+	target : outDir+idsName+".Events/"+idsName+".Events.csproj"
 
 }
 
-rule Ids2Alert transform ids : ids::Ids {
+rule Ids2Alert {
 	
 	template : "templates/Events/Ids2Alert.egl"
 	
 	parameters : Map {
 	
-		"namespace" = ids.name+".Events"
+		"namespace" = idsName+".Events"
 	
 	}
 	
-	target : outDir+ids.name+".Events/Alert.cs"
+	target : outDir+idsName+".Events/Alert.cs"
 	
 }
 
 rule Event2Record transform event : ids::Event {
 	
-	pre {
-		
-	}
-	
 	template : "templates/Events/Event2Record.egl"
 	
 	parameters : Map {
 	
-		"namespace" = event.ids.name+".Events.Custom",
+		"namespace" = idsName+".Events.Custom",
 		"className" = event.name,
 		"fields" = event.fields
 	
 	}
 	
-	target : outDir+event.ids.name+".Events/Custom/"+event.name+".cs"
+	target : outDir+idsName+".Events/Custom/"+event.name+".cs"
 		
 }
 
@@ -54,64 +51,64 @@ rule Event2Record transform event : ids::Event {
 //	MONITOR
 //
 
-rule Ids2MonitorCsproj transform ids : ids::Ids {
+rule Ids2MonitorCsproj {
 
 	template : "templates/Monitor/Ids2Csproj.egl"
 	
 	parameters : Map {
 	
-		"eventProject" = ids.name+".Events"
+		"eventProject" = idsName+".Events"
 	
 	}
 	
-	target : outDir+ids.name+".Monitor/"+ids.name+".Monitor.csproj"
+	target : outDir+idsName+".Monitor/"+idsName+".Monitor.csproj"
 
 }
 
-rule Ids2MonitorDockerfile transform ids : ids::Ids {
+rule Ids2MonitorDockerfile {
 
 	template : "templates/Monitor/Ids2Dockerfile.egl"
 	
 	parameters : Map {
 	
-		"project" = ids.name+".Monitor"
+		"project" = idsName+".Monitor"
 	
 	}
 	
-	target : outDir+ids.name+".Monitor/Dockerfile"
+	target : outDir+idsName+".Monitor/Dockerfile"
 
 }
 
-rule Ids2MonitorProgram transform ids : ids::Ids {
+rule Ids2MonitorProgram {
 
 	template : "templates/Monitor/Ids2Program.egl"
 	
 	parameters : Map {}
 	
-	target : outDir+ids.name+".Monitor/Program.cs"
+	target : outDir+idsName+".Monitor/Program.cs"
 
 }
 
-rule Ids2MonitorAppsettings transform ids : ids::Ids {
+rule Ids2MonitorAppsettings {
 
 	template : "templates/Monitor/Ids2Appsettings.egl"
 	
 	parameters : Map {}
 	
-	target : outDir+ids.name+".Monitor/appsettings.json"
+	target : outDir+idsName+".Monitor/appsettings.json"
 
 }
 
-rule StateMachine2Saga transform machine : ids::StateMachine {
+rule StateMachine2Saga transform machine : ids::Attack {
 	
 	template : "templates/Monitor/StateMachine2Saga.egl"
 	
 	parameters : Map {
 		
-		"namespace" = machine.ids.name+".Monitor."+machine.name,
-		"eventNamespace" = machine.ids.name+".Events",
-		"customEventNamespace" = machine.ids.name+".Events.Custom",
-		"sagaEventNamespace" = machine.ids.name+".Monitor."+machine.name+".Events",
+		"namespace" = idsName+".Monitor."+machine.name,
+		"eventNamespace" = idsName+".Events",
+		"customEventNamespace" = idsName+".Events.Custom",
+		"sagaEventNamespace" = idsName+".Monitor."+machine.name+".Events",
 		"className" = machine.name+"StateMachine",
 		"stateTypeName" = machine.name+"State",
 		
@@ -122,36 +119,36 @@ rule StateMachine2Saga transform machine : ids::StateMachine {
 		
 	}	
 	
-	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/"+machine.name+"StateMachine.cs"
+	target : outDir+idsName+".Monitor/"+machine.name+"/"+machine.name+"StateMachine.cs"
 }
 
-rule StateMachine2State transform machine : ids::StateMachine {
+rule StateMachine2State transform machine : ids::Attack {
 
 	template : "templates/Monitor/StateMachine2State.egl"
 	
 	parameters : Map {
 	
-		"namespace" = machine.ids.name+".Monitor."+machine.name,
+		"namespace" = idsName+".Monitor."+machine.name,
 		"className" = machine.name+"State",
 		"fields" = machine.fields
 	
 	}
 	
-	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/"+machine.name+"State.cs"
+	target : outDir+idsName+".Monitor/"+machine.name+"/"+machine.name+"State.cs"
 	
 }
 
-rule StateMachine2TimeoutEvent transform machine : ids::StateMachine {
+rule StateMachine2TimeoutEvent transform machine : ids::Attack {
 
 	template : "templates/Monitor/StateMachine2TimeoutEvent.egl"
 	
 	parameters : Map {
 		
-		"namespace" = machine.ids.name+".Monitor."+machine.name+".Events"
+		"namespace" = idsName+".Monitor."+machine.name+".Events"
 		
 	}
 	
-	target : outDir+machine.ids.name+".Monitor/"+machine.name+"/Events/Timeout.cs"
+	target : outDir+idsName+".Monitor/"+machine.name+"/Events/Timeout.cs"
 
 }
 
@@ -159,97 +156,97 @@ rule StateMachine2TimeoutEvent transform machine : ids::StateMachine {
 //	SENSOR
 //
 
-rule Ids2SensorCsproj transform ids : ids::Ids {
+rule Ids2SensorCsproj {
 
 	template : "templates/Sensor/Ids2Csproj.egl"
 	
 	parameters : Map {
 	
-		"eventProject" = ids.name+".Events"
+		"eventProject" = idsName+".Events"
 	
 	}
 	
-	target : outDir+ids.name+".Sensor/"+ids.name+".Sensor.csproj"
+	target : outDir+idsName+".Sensor/"+idsName+".Sensor.csproj"
 
 }
 
-rule Ids2SensorDockerfile transform ids : ids::Ids {
+rule Ids2SensorDockerfile {
 
 	template : "templates/Sensor/Ids2Dockerfile.egl"
 	
 	parameters : Map {
 	
-		"project" = ids.name+".Sensor"
+		"project" = idsName+".Sensor"
 		
 	}
 	
-	target : outDir+ids.name+".Sensor/Dockerfile"
+	target : outDir+idsName+".Sensor/Dockerfile"
 	
 }
 
-rule Ids2SensorProgram transform ids : ids::Ids {
+rule Ids2SensorProgram {
 
 	template : "templates/Sensor/Ids2Program.egl"
 	
 	parameters : Map {
 
-		"namespace" = ids.name+".Sensor"
+		"namespace" = idsName+".Sensor"
 
 	}
 	
-	target : outDir+ids.name+".Sensor/Program.cs"
+	target : outDir+idsName+".Sensor/Program.cs"
 
 }
 
-rule Ids2SensorAppsettings transform ids : ids::Ids {
+rule Ids2SensorAppsettings {
 
 	template : "templates/Sensor/Ids2Appsettings.egl"
 	
 	parameters : Map {}
 	
-	target : outDir+ids.name+".Sensor/appsettings.json"
+	target : outDir+idsName+".Sensor/appsettings.json"
 
 }
 
-rule Ids2IPacketMatch transform ids : ids::Ids {
+rule Ids2IPacketMatch {
 
 	template : "templates/Sensor/Ids2IPacketMatch.egl"
 	
 	parameters : Map {
 	
-		"namespace" = ids.name+".Sensor"
+		"namespace" = idsName+".Sensor"
 	
 	}
 	
-	target : outDir+ids.name+".Sensor/IPacketMatch.cs"
+	target : outDir+idsName+".Sensor/IPacketMatch.cs"
 
 }
 
-rule Ids2PacketMatch transform ids : ids::Ids {
+rule Ids2PacketMatch {
 
 	template : "templates/Sensor/Ids2PacketMatch.egl"
 	
 	parameters : Map {
 	
-		"namespace" = ids.name+".Sensor",
-		"eventNamespace" = ids.name+".Events.Custom",
-		"events" = ids.events
+		"namespace" = idsName+".Sensor",
+		"eventNamespace" = idsName+".Events.Custom",
+		"events" = Event.allInstances()
 	}
 	
-	target : outDir+ids.name+".Sensor/PacketMatch.cs"
+	target : outDir+idsName+".Sensor/PacketMatch.cs"
 
 }
 
-rule Ids2PcapHostedService transform ids : ids::Ids {
+rule Ids2PcapHostedService {
 
 	template : "templates/Sensor/Ids2PcapHostedService.egl"
 	
 	parameters : Map {
 	
-		"namespace" = ids.name+".Sensor"
+		"namespace" = idsName+".Sensor"
 	
 	}
 	
-	target : outDir+ids.name+".Sensor/PcapHostedService.cs"
+	target : outDir+idsName+".Sensor/PcapHostedService.cs"
 
 }

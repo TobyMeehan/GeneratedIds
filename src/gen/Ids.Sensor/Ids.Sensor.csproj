@@ -16,11 +16,11 @@
     <ItemGroup>
       <PackageReference Include="MassTransit" Version="8.2.1" />
       <PackageReference Include="MassTransit.Grpc" Version="8.1.3" />
-      <PackageReference Include="MassTransit.Quartz" Version="8.2.1" />
+      <PackageReference Include="SharpPcap" Version="6.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ArpDetectionSystem.Events\ArpDetectionSystem.Events.csproj" />
+      <ProjectReference Include="..\Ids.Events\Ids.Events.csproj" />
     </ItemGroup>
 
 </Project>

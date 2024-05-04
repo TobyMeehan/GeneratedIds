@@ -1,6 +1,6 @@
 using PacketDotNet;
 
-namespace ArpDetectionSystem.Sensor;
+namespace Ids.Sensor;
 
 public interface IPacketMatch
 {

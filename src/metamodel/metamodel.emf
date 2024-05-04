@@ -3,12 +3,6 @@ package ids;
 
 datatype TimeSpan : int;
 
-class Ids {
-	attr String name;
-	val Event[*]#ids events;
-	val StateMachine[*]#ids stateMachines;
-}
-
 
 class Field {
 	attr String name;
@@ -24,16 +18,12 @@ class Type {
 class Event {
 	attr String name;
 	val Field[*] fields;
-	
-	ref Ids#events ids;
 }
 
 
-class StateMachine {
+class Attack {
 	attr String name;
 	attr TimeSpan timeout;
-	
-	ref Ids#stateMachines ids;
 	
 	ref Event[*] events;
 	

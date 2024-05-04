@@ -1,42 +1,40 @@
 <?nsuri ids?>
-<?render-egx picto/statemachine.egx?>
+<?render-egx picto/picto.egx?> 
 
 <_>
 
 	<Type name="PhysicalAddress" namespace="System.Net.NetworkInformation" />
-	<Type name="IPAddress" namespace="System.Net" /> 
-	<Type name="string" />
-
-	<Ids name="ArpDetectionSystem">
-		<Event name="ArpRequest">
-			<Field name="SourceMac" type="string" />
-			<Field name="RequestedIp" type="string" /> 
-		</Event>
-		<Event name="ArpResponse">
-			<Field name="ResultMac" type="string" />
-			<Field name="RequestedIp" type="string" />
-		</Event>
+	<Type name="IPAddress" namespace="System.Net" />  
+	<Type name="string" />  
+ 
+	<Event name="ArpRequest">
+		<Field name="SourceMac" type="string" />
+		<Field name="RequestedIp" type="string" /> 
+	</Event>
+	<Event name="ArpResponse">
+		<Field name="ResultMac" type="string" />
+		<Field name="RequestedIp" type="string" />
+	</Event>
+	
+	<Attack name="ArpCachePoisoning" timeout="30" events="ArpRequest, ArpResponse">
 		
-		<StateMachine name="ArpSpoof" timeout="30" events="ArpRequest, ArpResponse">
-			
-			<Field name="RequestedAddress" type="string" />
+		<Field name="RequestedAddress" type="string" />
+	
+		<State name="RequestHalfCycle" />
+		<State name="ResponseHalfCycle" /> 
+		<State name="FullCycle" />
 		
-			<State name="RequestHalfCycle" />
-			<State name="ResponseHalfCycle" /> 
-			<State name="FullCycle" />
-			
-			<Transition name="Init2Request" event="ArpRequest" to="RequestHalfCycle" />
-			<Transition name="Init2Response" event="ArpResponse" to="ResponseHalfCycle" />
-			
-			<Transition name="Request2Request" from="RequestHalfCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
-			<Transition name="Request2Response" from="RequestHalfCycle" event="ArpResponse" to="FullCycle" />
-			
-			<Transition name="Response2Request" from="ResponseHalfCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
-			<Transition name="Response2Response" from="ResponseHalfCycle" event="ArpResponse" alert="true" />
-			
-			<Transition name="FullCycle2Request" from="FullCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
-			<Transition name="FullCycle2Response" from="FullCycle" event="ArpResponse" alert="true" />
-		</StateMachine>
-	</Ids>
+		<Transition name="Init2Request" event="ArpRequest" to="RequestHalfCycle" />
+		<Transition name="Init2Response" event="ArpResponse" to="ResponseHalfCycle" />
+		
+		<Transition name="Request2Request" from="RequestHalfCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
+		<Transition name="Request2Response" from="RequestHalfCycle" event="ArpResponse" to="FullCycle" />
+		
+		<Transition name="Response2Request" from="ResponseHalfCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
+		<Transition name="Response2Response" from="ResponseHalfCycle" event="ArpResponse" alert="true" />
+		
+		<Transition name="FullCycle2Request" from="FullCycle" event="ArpRequest" to="RequestHalfCycle" resetTimeout="true" />
+		<Transition name="FullCycle2Response" from="FullCycle" event="ArpResponse" alert="true" />
+	</Attack> 
 
 </_>
